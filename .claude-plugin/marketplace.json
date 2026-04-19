@@ -1,0 +1,12 @@
+{
+  "name": "claude-agency",
+  "description": "160+ specialist AI agents for Claude Code",
+  "plugins": [
+    {
+      "name": "agency",
+      "version": "1.0.0",
+      "description": "160+ specialist AI agents for Claude Code. Assemble expert teams for any task.",
+      "path": "."
+    }
+  ]
+}
