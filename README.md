@@ -24,6 +24,12 @@ curl -fsSL https://raw.githubusercontent.com/anjolok1997/claude-agency/main/scri
 
 Then restart Claude Code.
 
+## Uninstall
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/anjolok1997/claude-agency/main/scripts/uninstall.sh | bash
+```
+
 ## Usage
 
 ### `/team` — Assemble specialists for any task
@@ -98,6 +104,24 @@ Claude will:
 3. **Claude's Agent tool** runs specialists in parallel
 
 No external dependencies. No API keys. Just your Claude Code subscription.
+
+## Troubleshooting
+
+**Commands not working after install?**
+- Restart Claude Code completely (quit and reopen)
+- Check agents installed: `ls ~/.claude/agents/`
+- Check skills installed: `ls ~/.claude/commands/`
+
+**"Agent not found" errors?**
+- Run `/agents` to see available agent names
+- Agent names are lowercase with hyphens: `backend-architect`, not `BackendArchitect`
+
+**Want to update?**
+- Re-run the install script — it will overwrite existing files
+
+**Permission denied?**
+- The install creates files in `~/.claude/` which should be writable
+- Try: `mkdir -p ~/.claude/agents ~/.claude/commands`
 
 ## Credits
 
