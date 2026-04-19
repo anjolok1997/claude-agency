@@ -1,2 +1,7 @@
 .DS_Store
 *.log
+.env*
+*.pem
+*.key
+node_modules/
+.idea/

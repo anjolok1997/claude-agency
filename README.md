@@ -18,11 +18,19 @@ Each agent has domain expertise, specific deliverables, and consistent quality b
 
 ## Install
 
+**In Claude Code terminal**, just type:
 ```
-/plugin anjolok1997/claude-agency
+! curl -fsSL https://raw.githubusercontent.com/anjolok1997/claude-agency/main/scripts/install.sh | bash
 ```
 
-That's it. The plugin installs 160+ agents and 3 skills.
+Or ask Claude: *"Install claude-agency from anjolok1997/claude-agency"*
+
+**From regular terminal:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/anjolok1997/claude-agency/main/scripts/install.sh | bash
+```
+
+Restart Claude Code and you're ready.
 
 ## Usage
 
