@@ -1,32 +1,45 @@
 #!/bin/bash
-# Install agency-agents to ~/.claude/agents/
+# Core agent installation - used by both install.sh and plugin postInstall
+# Pinned to specific commit for security
 
 set -e
 
 AGENTS_DIR="$HOME/.claude/agents"
 REPO_URL="https://github.com/msitarzewski/agency-agents.git"
+REPO_COMMIT="783f6a72bfd7f3135700ac273c619d92821b419a"
 TEMP_DIR=$(mktemp -d)
+
+cleanup() {
+  rm -rf "$TEMP_DIR"
+}
+trap cleanup EXIT
 
 echo "Installing The Agency agents..."
 
-# Clone the repo
+# Clone at specific commit
 git clone --depth 1 "$REPO_URL" "$TEMP_DIR" 2>/dev/null || {
-  echo "Failed to clone agency-agents repo"
+  echo "Error: Failed to clone agency-agents repo"
   exit 1
 }
+
+cd "$TEMP_DIR"
+git fetch --depth 1 origin "$REPO_COMMIT" 2>/dev/null && git checkout "$REPO_COMMIT" 2>/dev/null || {
+  echo "Warning: Could not checkout pinned commit, using latest"
+}
+cd - > /dev/null
 
 # Create agents directory
 mkdir -p "$AGENTS_DIR"
 
 # Copy all agent .md files (flatten structure for easier access)
 count=0
-for category in engineering design marketing research product testing support academic specialized game-development sales paid-media project-management spatial-computing; do
+categories="engineering design marketing research product testing support academic specialized game-development sales paid-media project-management spatial-computing"
+
+for category in $categories; do
   if [ -d "$TEMP_DIR/$category" ]; then
     for file in "$TEMP_DIR/$category"/*.md; do
       if [ -f "$file" ]; then
-        # Extract just the agent name from the filename
         filename=$(basename "$file")
-        # Remove category prefix if present (e.g., engineering-backend-architect.md -> backend-architect.md)
         clean_name=$(echo "$filename" | sed "s/^${category}-//")
         cp "$file" "$AGENTS_DIR/$clean_name"
         ((count++))
@@ -47,12 +60,9 @@ for category in engineering design marketing research product testing support ac
   fi
 done
 
-# Cleanup
-rm -rf "$TEMP_DIR"
+if [ "$count" -eq 0 ]; then
+  echo "Error: No agents were installed"
+  exit 1
+fi
 
 echo "Installed $count agents to $AGENTS_DIR"
-echo ""
-echo "Usage:"
-echo "  /team <goal>           # Assemble a team for any task"
-echo "  /agents                # Browse available agents"
-echo "  /solo <agent> <task>   # Run a single specialist"
